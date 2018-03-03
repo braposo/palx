@@ -26,8 +26,6 @@ module.exports = () => h(Base, {
   h(Base, {
     px: 3,
     py: 1
-  },
-    h(Carbon)
-  )
+  })
 )
 
