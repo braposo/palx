@@ -8,7 +8,7 @@ const generateLums = lum => {
 
     // Make sure we always have the base colour as one
     // of the shades
-    const lums = [0.3 - decimal, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    const lums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
         .map(n => n + decimal)
         .map(n => n / 10)
         .sort((a, b) => b - a);
@@ -84,7 +84,7 @@ const palx = (hex, hues = 12, options = {}) => {
 
     // Set number of different colours
     //const generatedHues = createHues(hues)(hue);
-    const generatedHues = [hue, 120, 48, 30, 268]
+    const generatedHues = [hue, 120, 48, 30, 249]
 
     generatedHues.forEach(h => {
         // Get colour with same saturation and lightness than base for each hue
