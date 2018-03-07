@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prepublish": "babel src --out-dir dist",
-    "start": "micro -p 3000 server/index.js",
+    "start": "micro -p ${PORT:-3000} server/index.js",
     "dev": "nodemon --exec 'npm start'",
     "cover": "nyc report --reporter=html",
     "test": "nyc ava"
