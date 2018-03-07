@@ -64,7 +64,7 @@ const createBaseShades = (hex) => {
     return shades;
 }
 
-const generateShades = (base, hue) => {
+const createHueShades = (base, hue) => {
     // Go through base shades and generate equivalent for each hue
     const shades = base.map((shade) => {
         const [h, s, l] = chroma(shade).hsl();
@@ -112,7 +112,7 @@ const palx = (hex, hues = 12, options = {}) => {
 
         colors.push({
             key,
-            value: generateShades(baseShades, h)
+            value: createHueShades(baseShades, h)
         });
     });
 
