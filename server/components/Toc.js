@@ -31,22 +31,22 @@ module.exports = ({ colors }) => {
           transition: '.2s ease-out',
           transitionProperty: 'color, background-color',
           ':hover': {
-            backgroundColor: colors[key][5]
+            backgroundColor: colors[key][0]
           },
           ':focus': {
             outline: 'none',
-            backgroundColor: colors[key][5]
+            backgroundColor: colors[key][0]
           }
         }
       },
         h(Base, {
           p: 2,
-          bg: colors[key][1]
+          bg: colors[key][2]
         }),
         h(Base, {
           fontSize: 0,
           textAlign: 'center',
-          color: colors[key][1]
+          color: colors[key][2]
         }, cap(key))
       )
     ))
