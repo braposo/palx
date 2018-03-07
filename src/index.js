@@ -98,8 +98,8 @@ const palx = (hex, hues = 12, options = {}) => {
     const lum = color.luminance();
 
     // Set number of different colours
-    //const generatedHues = createHues(hues)(hue);
-    const generatedHues = [hue, 278, 348, 167]
+    const generatedHues = createHues(hues)(hue);
+    // const generatedHues = [hue, 278, 348, 167]
 
     // Generate the base shades from the original colour
     const baseShades = createBaseShades(hex);
