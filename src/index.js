@@ -2,19 +2,15 @@ const chroma = require("chroma-js");
 const hueName = require("./hue-name");
 
 const generateLums = lum => {
-    const integer = Math.floor(lum);
-    const decimal = lum - integer;
 
-    // Make sure we always have the base colour as one
-    // of the shades by adding the decimal to each step
-    const lums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        .map(n => n + decimal)
+    // This is very manual for now but ideally would replace
+    // the closes one with the base colour lum.
+    // This is just to make sure we display the base colour.
+    const lums = [0.2, 0.4, 0.8, 1.4, 2.4, lum, 4.5, 5.8, 7.4, 8.7]
         .map(n => n / 10)
         .sort((a, b) => b - a);
 
-    const selectedLums = [0, 3, 6, 8, 9].map(n => lums[n]);
-
-    return [...selectedLums, ...lums];
+    return lums;
 };
 
 const createArray = length => {
@@ -58,21 +54,45 @@ const createShades = (hex, lum) => {
     });
 };
 
-const createBaseShades = (hex) => {
+const createBaseShades = hex => {
     const lum = chroma(hex).luminance() * 10;
     const shades = createShades(hex, lum);
     return shades;
-}
+};
 
-const createHueShades = (base, hue) => {
+const createScaleShades = hex => {
+    const shades = chroma
+        .scale(["#fff", hex, "#000"])
+        .domain([0, 5, 10])
+        .colors(12)
+        .slice(1, 11);
+    return shades;
+};
+
+const createHueShades = (base, hue, lockLum = true) => {
     // Go through base shades and generate equivalent for each hue
-    const shades = base.map((shade) => {
-        const [h, s, l] = chroma(shade).hsl();
-        return chroma.hsl(hue, s, l).hex();
-    })
+    const shades = base.map(baseColour => {
+        // break baseColour in hue, saturation, lightness
+        const [h, s, l] = chroma(baseColour).hsl();
+
+        // gets new colour based on base colour saturation and lightness
+        // just changes hue
+        const newColour = chroma.hsl(hue, s, l);
+
+        // if luminance is locked, makes final colour same luminance
+        // as base colour
+        if (lockLum) {
+            // get luminance from base colour
+            const lum = chroma(baseColour).luminance();
+            return newColour.luminance(lum).hex();
+        }
+
+        // otherwise returns new colour
+        return newColour.hex();
+    });
 
     return shades;
-}
+};
 
 // Mappers
 const keyword = hex => {
@@ -98,13 +118,25 @@ const palx = (hex, hues = 12, options = {}) => {
     const lum = color.luminance();
 
     // Set number of different colours
-    const generatedHues = createHues(hues)(hue);
-    // const generatedHues = [hue, 278, 348, 167]
+    // const generatedHues = createHues(hues)(hue);
+
+    // Set a specific list of hues to be generated
+    const generatedHues = [hue, 113, 180, 215, 249, 275, 306, 348];
 
     // Generate the base shades from the original colour
     const baseShades = createBaseShades(hex);
 
-    // Get remaining shades from list of hues
+    // Generate the base shades from the original colour using
+    // the colour scale in chroma instead
+
+    // const scaleShades = createScaleShades(hex);
+
+    // colors.push({
+    //     key: "scale",
+    //     value: scaleShades,
+    // });
+
+    // Generates colours from list of hues keeping base luminance
     generatedHues.forEach(h => {
         // Get colour with same saturation and lightness than base for each hue
         const c = chroma.hsl(h, sat, lte);
@@ -112,7 +144,19 @@ const palx = (hex, hues = 12, options = {}) => {
 
         colors.push({
             key,
-            value: createHueShades(baseShades, h)
+            value: createHueShades(baseShades, h, true),
+        });
+    });
+
+    // Generates colours from list of hues without locking luminance
+    generatedHues.forEach(h => {
+        // Get colour with same saturation and lightness than base for each hue
+        const c = chroma.hsl(h, sat, lte);
+        const key = keyword(c);
+
+        colors.push({
+            key,
+            value: createHueShades(baseShades, h, false),
         });
     });
 
@@ -123,7 +167,7 @@ const palx = (hex, hues = 12, options = {}) => {
 
     colors.push({
         key: "gray",
-        value: createShades(desat(1 / 8)(hex), lum),
+        value: createShades(desat(1 / 6)(hex), lum),
     });
 
     const obj = Object.assign(
