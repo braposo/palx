@@ -148,18 +148,6 @@ const palx = (hex, hues = 12, options = {}) => {
         });
     });
 
-    // Generates colours from list of hues without locking luminance
-    generatedHues.forEach(h => {
-        // Get colour with same saturation and lightness than base for each hue
-        const c = chroma.hsl(h, sat, lte);
-        const key = keyword(c);
-
-        colors.push({
-            key,
-            value: createHueShades(baseShades, h, false),
-        });
-    });
-
     colors.push({
         key: "black",
         value: createBlack(hex),
