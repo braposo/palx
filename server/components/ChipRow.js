@@ -30,7 +30,7 @@ module.exports = ({ name, values }) =>
             values.map((v, i) =>
                 h(Chip, {
                     key: i,
-                    name: i,
+                    name: i + 1,
                     color: v,
                 })
             )
