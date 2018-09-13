@@ -12,7 +12,6 @@ module.exports = ({ color, colors }) => h(Base, {
   h(Base, {
     is: 'h2',
     mb: 2,
-    caps: true,
     fontSize: 2,
   }, 'Download'),
   h(Button, {

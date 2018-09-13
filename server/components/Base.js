@@ -12,7 +12,9 @@ const {
 
 const css = props => props.css
 
-const Base = nano(tag)(
+const tag2 = props => { if(props.onChange != null) { console.log(props.onChange); } return h(tag, props); }
+
+const Base = nano(tag2)(
   space,
   color,
   fontSize,

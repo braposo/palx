@@ -21,7 +21,6 @@ module.exports = ({ color, colors, }) =>
         is: 'h1',
         fontSize: 2,
         mr: 2,
-        caps: true
       }, 'Palx'),
       h(Base, {
         fontWeight: 'bold'

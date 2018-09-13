@@ -5,6 +5,7 @@ const {
 const { renderToStaticNodeStream } = require('react-dom/server')
 
 const head = require('./head')
+const App = require('./components/App')
 const Header = require('./components/Header')
 const Form = require('./components/Form')
 const Toc = require('./components/Toc')
@@ -19,6 +20,7 @@ module.exports = (req, res, { color, colors }) => {
   res.write(head({ color }))
   res.write('<div style="max-width:1280px;margin:auto;padding:32px">')
 
+
   const stream = renderToStaticNodeStream(
     h(Fragment, null,
       h(Header, { color, colors }),
@@ -30,6 +32,11 @@ module.exports = (req, res, { color, colors }) => {
       h(Footer, { color })
     )
   )
+
+  // const stream = renderToStaticNodeStream(
+  //   h(App, null, { color, colors })
+  // )
+
 
   stream.pipe(res, { end: false })
 
